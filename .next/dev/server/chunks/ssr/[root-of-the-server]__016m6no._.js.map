@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 10, "column": 0}, "map": {"version":3,"sources":["file:///C:/Users/ESAAH28/Downloads/drip-store/pages/_app.jsx"],"sourcesContent":["// ============================================================\n// pages/_app.jsx — Root App Component\n// Mengatur global styles dan layout wrapper untuk semua halaman.\n// ============================================================\n\nimport '../styles/globals.css';\n\nexport default function App({ Component, pageProps }) {\n  return <Component {...pageProps} />;\n}\n"],"names":["App","Component","pageProps"],"mappings":"AAAA,+DAA+D;AAC/D,sCAAsC;AACtC,iEAAiE;AACjE,+DAA+D;;;;;;;;AAIhD,SAASA,IAAI,EAAEC,SAAS,EAAEC,SAAS,EAAE;IAClD,qBAAO,qKAACD;QAAW,GAAGC,SAAS;;;;;;AACjC"}}]
+}
