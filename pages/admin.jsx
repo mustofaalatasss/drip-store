@@ -10,19 +10,31 @@ import { products } from '../lib/schema';
 
 // Ambil data produk dari database saat halaman dibuka
 export async function getServerSideProps() {
-    const db = getDb();
-    const allProducts = await db.select().from(products);
-    return {
-        props: {
-            initialProducts: allProducts.map((p) => ({
-                ...p,
-                createdAt: p.createdAt ? p.createdAt.toISOString() : null,
-            })),
-        },
-    };
+    try {
+        const { getDb } = require('../lib/db');
+        const { products } = require('../lib/schema');
+        const db = getDb();
+        const allProducts = await db.select().from(products);
+        return {
+            props: {
+                initialProducts: allProducts.map((p) => ({
+                    ...p,
+                    createdAt: p.createdAt ? p.createdAt.toISOString() : null,
+                })),
+            },
+        };
+    } catch (error) {
+        return {
+            props: {
+                initialProducts: [],
+            },
+        };
+    }
 }
 
 export default function AdminPage({ initialProducts }) {
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [password, setPassword] = useState('');
     const [productList, setProductList] = useState(initialProducts);
     const [form, setForm] = useState({
         name: '', price: '', image: '', stock: '',
@@ -107,6 +119,37 @@ export default function AdminPage({ initialProducts }) {
         }
         setLoading(false);
     };
+
+    if (!isAuthenticated) {
+        return (
+            <div style={{ background: '#0A0A0A', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ background: '#1A1A1A', padding: '2rem', borderRadius: '12px', width: '300px' }}>
+                    <h2 style={{ color: 'white', marginBottom: '1rem' }}>
+                        🔐 Admin Access
+                    </h2>
+                    <input
+                        type="password"
+                        placeholder="Jangan macam macam"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        style={{ width: '100%', padding: '0.75rem', background: '#222', border: '1px solid #333', borderRadius: '8px', color: 'white', marginBottom: '1rem' }}
+                    />
+                    <button
+                        onClick={() => {
+                            if (password === 'Kamu1234561') {
+                                setIsAuthenticated(true);
+                            } else {
+                                alert('Password salah!');
+                            }
+                        }}
+                        style={{ width: '100%', padding: '0.75rem', background: '#FF2D87', border: 'none', borderRadius: '8px', color: 'white', fontWeight: 'bold', cursor: 'pointer' }}
+                    >
+                        Login
+                    </button>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div style={{ background: '#0A0A0A', minHeight: '100vh', color: 'white', padding: '2rem', fontFamily: 'sans-serif' }}>
