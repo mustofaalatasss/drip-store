@@ -8,6 +8,7 @@
         "start": "next start"
     },
     "dependencies": {
+        "@neondatabase/serverless": "^1.1.0",
         "autoprefixer": "^10.5.0",
         "better-sqlite3": "^12.10.0",
         "clsx": "latest",
