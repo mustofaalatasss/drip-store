@@ -8,6 +8,8 @@ import { getDb } from '../../lib/db';
 import { products } from '../../lib/schema';
 import { eq } from 'drizzle-orm';
 import Link from 'next/link';
+import { useState, useEffect} from 'react';
+import { useLocalStorage } from '../../lib/useLocalStorage';
 
 export async function getServerSideProps({ params }) {
     const db = getDb();
@@ -31,6 +33,13 @@ export default function ProductDetail({ product }) {
     const discountedPrice = product.discount
         ? product.price * (1 - product.discount / 100)
         : product.price;
+    const [mounted, setMounted] = useState(false);
+    const [isWishlisted, setIsWishlisted] = useLocalStorage(`wishlist-${product.id}`, false);
+
+
+    useEffect(() => {
+    setMounted(true);
+}, []);
 
     return (
         <div style={{ background: '#0A0A0A', minHeight: '100vh', color: 'white', fontFamily: 'sans-serif' }}>
@@ -116,8 +125,11 @@ export default function ProductDetail({ product }) {
                         >
                             💬 Beli via WhatsApp
                         </a>
-                        <button style={{ padding: '1rem', background: '#1A1A1A', border: '1px solid #333', borderRadius: '12px', color: 'white', cursor: 'pointer' }}>
-                            ♡
+                        <button
+                         onClick={() => setIsWishlisted(!isWishlisted)}
+                        style={{ padding: '1rem', background: '#1A1A1A', border: '1px solid #333', borderRadius: '12px', color: mounted && isWishlisted ? '#FF2D87' : 'white', cursor: 'pointer', fontSize: '1.2rem' }}
+                    >
+                        {mounted && isWishlisted ? '♥' : '♡'}
                         </button>
                     </div>
 

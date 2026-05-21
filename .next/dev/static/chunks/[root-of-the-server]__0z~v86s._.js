@@ -591,6 +591,25 @@ function AdminPage({ initialProducts }) {
     const [editId, setEditId] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])(null);
     const [loading, setLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const [message, setMessage] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])('');
+    const [filterKategori, setFilterKategori] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])('semua');
+    const produkTampil = filterKategori === 'semua' ? productList : productList.filter((p)=>p.category === filterKategori);
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "AdminPage.useEffect": ()=>{
+            if (message) {
+                const timer = setTimeout({
+                    "AdminPage.useEffect.timer": ()=>{
+                        setMessage('');
+                    }
+                }["AdminPage.useEffect.timer"], 3000);
+                return ({
+                    "AdminPage.useEffect": ()=>clearTimeout(timer)
+                })["AdminPage.useEffect"];
+            }
+        }
+    }["AdminPage.useEffect"], [
+        message
+    ]);
+    const totalHarga = produkTampil.reduce((total, p)=>total + p.price, 0);
     // === TAMBAH PRODUK ===
     const handleSubmit = async (e)=>{
         e.preventDefault();
@@ -630,13 +649,18 @@ function AdminPage({ initialProducts }) {
     const handleDelete = async (id)=>{
         if (!confirm('Yakin mau hapus produk ini?')) return;
         try {
-            await fetch(`/api/products/${id}`, {
+            const res = await fetch(`/api/products/${id}`, {
                 method: 'DELETE'
             });
-            setProductList(productList.filter((p)=>p.id !== id));
-            setMessage('✓ Produk berhasil dihapus!');
+            const data = await res.json();
+            if (data.success) {
+                setProductList(productList.filter((p)=>p.id !== id));
+                setMessage('✓ Produk berhasil dihapus!');
+            } else {
+                setMessage('✗ Gagal hapus produk');
+            }
         } catch (err) {
-            setMessage('✗ Gagal hapus produk');
+            setMessage('✗ Gagal hapus produk: ' + err.message);
         }
     };
     // === EDIT PRODUK ===
@@ -657,33 +681,51 @@ function AdminPage({ initialProducts }) {
         e.preventDefault();
         setLoading(true);
         try {
-            await fetch(`/api/products/${editId}`, {
+            const res = await fetch(`/api/products/${editId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(form)
             });
-            setMessage('✓ Produk berhasil diupdate!');
-            setProductList(productList.map((p)=>p.id === editId ? {
-                    ...p,
-                    ...form
-                } : p));
-            setEditId(null);
-            setForm({
-                name: '',
-                price: '',
-                image: '',
-                stock: '',
-                category: 'streetwear',
-                description: '',
-                badge: '',
-                discount: '0'
-            });
+            const data = await res.json();
+            if (data.success) {
+                setMessage('✓ Produk berhasil diupdate!');
+                setProductList(productList.map((p)=>p.id === editId ? {
+                        ...p,
+                        ...form
+                    } : p));
+                setEditId(null);
+                setForm({
+                    name: '',
+                    price: '',
+                    image: '',
+                    stock: '',
+                    category: 'streetwear',
+                    description: '',
+                    badge: '',
+                    discount: '0'
+                });
+            } else {
+                setMessage('✗ Gagal update produk');
+            }
         } catch (err) {
-            setMessage('✗ Gagal update produk');
+            setMessage('✗ Gagal update produk: ' + err.message);
         }
         setLoading(false);
+    };
+    const handleCancel = ()=>{
+        setEditId(null);
+        setForm({
+            name: '',
+            price: '',
+            image: '',
+            stock: '',
+            category: 'streetwear',
+            description: '',
+            badge: '',
+            discount: '0'
+        });
     };
     if (!isAuthenticated) {
         return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -710,7 +752,7 @@ function AdminPage({ initialProducts }) {
                         children: "🔐 Admin Access"
                     }, void 0, false, {
                         fileName: "[project]/pages/admin.jsx",
-                        lineNumber: 127,
+                        lineNumber: 156,
                         columnNumber: 21
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -729,7 +771,7 @@ function AdminPage({ initialProducts }) {
                         }
                     }, void 0, false, {
                         fileName: "[project]/pages/admin.jsx",
-                        lineNumber: 130,
+                        lineNumber: 159,
                         columnNumber: 21
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -753,18 +795,18 @@ function AdminPage({ initialProducts }) {
                         children: "Login"
                     }, void 0, false, {
                         fileName: "[project]/pages/admin.jsx",
-                        lineNumber: 137,
+                        lineNumber: 166,
                         columnNumber: 21
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/pages/admin.jsx",
-                lineNumber: 126,
+                lineNumber: 155,
                 columnNumber: 17
             }, this)
         }, void 0, false, {
             fileName: "[project]/pages/admin.jsx",
-            lineNumber: 125,
+            lineNumber: 154,
             columnNumber: 13
         }, this);
     }
@@ -786,7 +828,7 @@ function AdminPage({ initialProducts }) {
                 children: "🔧 DRIP Admin Panel"
             }, void 0, false, {
                 fileName: "[project]/pages/admin.jsx",
-                lineNumber: 156,
+                lineNumber: 185,
                 columnNumber: 13
             }, this),
             message && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -800,7 +842,7 @@ function AdminPage({ initialProducts }) {
                 children: message
             }, void 0, false, {
                 fileName: "[project]/pages/admin.jsx",
-                lineNumber: 162,
+                lineNumber: 191,
                 columnNumber: 17
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -819,7 +861,7 @@ function AdminPage({ initialProducts }) {
                         children: editId ? '✏️ Edit Produk' : '➕ Tambah Produk Baru'
                     }, void 0, false, {
                         fileName: "[project]/pages/admin.jsx",
-                        lineNumber: 169,
+                        lineNumber: 198,
                         columnNumber: 17
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
@@ -875,7 +917,7 @@ function AdminPage({ initialProducts }) {
                                                     children: field.label
                                                 }, void 0, false, {
                                                     fileName: "[project]/pages/admin.jsx",
-                                                    lineNumber: 183,
+                                                    lineNumber: 212,
                                                     columnNumber: 33
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -901,13 +943,13 @@ function AdminPage({ initialProducts }) {
                                                     }
                                                 }, void 0, false, {
                                                     fileName: "[project]/pages/admin.jsx",
-                                                    lineNumber: 186,
+                                                    lineNumber: 215,
                                                     columnNumber: 33
                                                 }, this)
                                             ]
                                         }, field.key, true, {
                                             fileName: "[project]/pages/admin.jsx",
-                                            lineNumber: 182,
+                                            lineNumber: 211,
                                             columnNumber: 29
                                         }, this)),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -922,7 +964,7 @@ function AdminPage({ initialProducts }) {
                                                 children: "Kategori"
                                             }, void 0, false, {
                                                 fileName: "[project]/pages/admin.jsx",
-                                                lineNumber: 198,
+                                                lineNumber: 227,
                                                 columnNumber: 29
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -950,18 +992,18 @@ function AdminPage({ initialProducts }) {
                                                         children: cat
                                                     }, cat, false, {
                                                         fileName: "[project]/pages/admin.jsx",
-                                                        lineNumber: 207,
+                                                        lineNumber: 236,
                                                         columnNumber: 37
                                                     }, this))
                                             }, void 0, false, {
                                                 fileName: "[project]/pages/admin.jsx",
-                                                lineNumber: 201,
+                                                lineNumber: 230,
                                                 columnNumber: 29
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/pages/admin.jsx",
-                                        lineNumber: 197,
+                                        lineNumber: 226,
                                         columnNumber: 25
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -976,7 +1018,7 @@ function AdminPage({ initialProducts }) {
                                                 children: "Badge"
                                             }, void 0, false, {
                                                 fileName: "[project]/pages/admin.jsx",
-                                                lineNumber: 214,
+                                                lineNumber: 243,
                                                 columnNumber: 29
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -1004,24 +1046,24 @@ function AdminPage({ initialProducts }) {
                                                         children: b || 'Tidak ada'
                                                     }, b, false, {
                                                         fileName: "[project]/pages/admin.jsx",
-                                                        lineNumber: 223,
+                                                        lineNumber: 252,
                                                         columnNumber: 37
                                                     }, this))
                                             }, void 0, false, {
                                                 fileName: "[project]/pages/admin.jsx",
-                                                lineNumber: 217,
+                                                lineNumber: 246,
                                                 columnNumber: 29
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/pages/admin.jsx",
-                                        lineNumber: 213,
+                                        lineNumber: 242,
                                         columnNumber: 25
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/pages/admin.jsx",
-                                lineNumber: 173,
+                                lineNumber: 202,
                                 columnNumber: 21
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1046,24 +1088,12 @@ function AdminPage({ initialProducts }) {
                                         children: loading ? 'Loading...' : editId ? 'Update Produk' : 'Tambah Produk'
                                     }, void 0, false, {
                                         fileName: "[project]/pages/admin.jsx",
-                                        lineNumber: 230,
+                                        lineNumber: 259,
                                         columnNumber: 25
                                     }, this),
                                     editId && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                         type: "button",
-                                        onClick: ()=>{
-                                            setEditId(null);
-                                            setForm({
-                                                name: '',
-                                                price: '',
-                                                image: '',
-                                                stock: '',
-                                                category: 'streetwear',
-                                                description: '',
-                                                badge: '',
-                                                discount: '0'
-                                            });
-                                        },
+                                        onClick: handleCancel,
                                         style: {
                                             padding: '0.75rem 2rem',
                                             background: '#333',
@@ -1075,25 +1105,25 @@ function AdminPage({ initialProducts }) {
                                         children: "Batal"
                                     }, void 0, false, {
                                         fileName: "[project]/pages/admin.jsx",
-                                        lineNumber: 238,
+                                        lineNumber: 267,
                                         columnNumber: 29
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/pages/admin.jsx",
-                                lineNumber: 229,
+                                lineNumber: 258,
                                 columnNumber: 21
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/pages/admin.jsx",
-                        lineNumber: 172,
+                        lineNumber: 201,
                         columnNumber: 17
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/pages/admin.jsx",
-                lineNumber: 168,
+                lineNumber: 197,
                 columnNumber: 13
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1107,16 +1137,76 @@ function AdminPage({ initialProducts }) {
                         style: {
                             padding: '1.5rem',
                             color: '#FF2D87',
-                            borderBottom: '1px solid #333'
+                            borderBottom: '1px solid #333',
+                            display: 'flex',
+                            justifyContent: 'space-between'
                         },
                         children: [
-                            "📦 Semua Produk (",
-                            productList.length,
-                            ")"
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                children: [
+                                    "📦 Semua Produk (",
+                                    productList.length,
+                                    ")"
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/pages/admin.jsx",
+                                lineNumber: 282,
+                                columnNumber: 21
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                style: {
+                                    fontSize: '1rem',
+                                    color: '#00F0FF'
+                                },
+                                children: [
+                                    "Total: Rp",
+                                    totalHarga.toLocaleString()
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/pages/admin.jsx",
+                                lineNumber: 283,
+                                columnNumber: 21
+                            }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/pages/admin.jsx",
-                        lineNumber: 252,
+                        lineNumber: 281,
+                        columnNumber: 17
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        style: {
+                            padding: '1rem 1.5rem',
+                            display: 'flex',
+                            gap: '0.5rem',
+                            flexWrap: 'wrap'
+                        },
+                        children: [
+                            'semua',
+                            'streetwear',
+                            'y2k',
+                            'vintage',
+                            'minimal',
+                            'bold'
+                        ].map((kat)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                onClick: ()=>setFilterKategori(kat),
+                                style: {
+                                    padding: '0.4rem 1rem',
+                                    background: filterKategori === kat ? '#FF2D87' : '#333',
+                                    border: 'none',
+                                    borderRadius: '20px',
+                                    color: 'white',
+                                    cursor: 'pointer',
+                                    fontWeight: filterKategori === kat ? 'bold' : 'normal'
+                                },
+                                children: kat
+                            }, kat, false, {
+                                fileName: "[project]/pages/admin.jsx",
+                                lineNumber: 289,
+                                columnNumber: 25
+                            }, this))
+                    }, void 0, false, {
+                        fileName: "[project]/pages/admin.jsx",
+                        lineNumber: 287,
                         columnNumber: 17
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("table", {
@@ -1148,21 +1238,21 @@ function AdminPage({ initialProducts }) {
                                             children: h
                                         }, h, false, {
                                             fileName: "[project]/pages/admin.jsx",
-                                            lineNumber: 259,
+                                            lineNumber: 298,
                                             columnNumber: 33
                                         }, this))
                                 }, void 0, false, {
                                     fileName: "[project]/pages/admin.jsx",
-                                    lineNumber: 257,
+                                    lineNumber: 296,
                                     columnNumber: 25
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/pages/admin.jsx",
-                                lineNumber: 256,
+                                lineNumber: 295,
                                 columnNumber: 21
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tbody", {
-                                children: productList.map((p)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
+                                children: produkTampil.map((p)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
                                         style: {
                                             borderBottom: '1px solid #222'
                                         },
@@ -1175,7 +1265,7 @@ function AdminPage({ initialProducts }) {
                                                 children: p.id
                                             }, void 0, false, {
                                                 fileName: "[project]/pages/admin.jsx",
-                                                lineNumber: 266,
+                                                lineNumber: 305,
                                                 columnNumber: 33
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -1185,7 +1275,7 @@ function AdminPage({ initialProducts }) {
                                                 children: p.name
                                             }, void 0, false, {
                                                 fileName: "[project]/pages/admin.jsx",
-                                                lineNumber: 267,
+                                                lineNumber: 306,
                                                 columnNumber: 33
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -1199,7 +1289,7 @@ function AdminPage({ initialProducts }) {
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/pages/admin.jsx",
-                                                lineNumber: 268,
+                                                lineNumber: 307,
                                                 columnNumber: 33
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -1209,7 +1299,7 @@ function AdminPage({ initialProducts }) {
                                                 children: p.stock
                                             }, void 0, false, {
                                                 fileName: "[project]/pages/admin.jsx",
-                                                lineNumber: 269,
+                                                lineNumber: 308,
                                                 columnNumber: 33
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -1220,7 +1310,7 @@ function AdminPage({ initialProducts }) {
                                                 children: p.category
                                             }, void 0, false, {
                                                 fileName: "[project]/pages/admin.jsx",
-                                                lineNumber: 270,
+                                                lineNumber: 309,
                                                 columnNumber: 33
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -1230,7 +1320,7 @@ function AdminPage({ initialProducts }) {
                                                 children: p.badge || '-'
                                             }, void 0, false, {
                                                 fileName: "[project]/pages/admin.jsx",
-                                                lineNumber: 271,
+                                                lineNumber: 310,
                                                 columnNumber: 33
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -1253,7 +1343,7 @@ function AdminPage({ initialProducts }) {
                                                         children: "Edit"
                                                     }, void 0, false, {
                                                         fileName: "[project]/pages/admin.jsx",
-                                                        lineNumber: 273,
+                                                        lineNumber: 312,
                                                         columnNumber: 37
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1269,46 +1359,46 @@ function AdminPage({ initialProducts }) {
                                                         children: "Hapus"
                                                     }, void 0, false, {
                                                         fileName: "[project]/pages/admin.jsx",
-                                                        lineNumber: 279,
+                                                        lineNumber: 318,
                                                         columnNumber: 37
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/pages/admin.jsx",
-                                                lineNumber: 272,
+                                                lineNumber: 311,
                                                 columnNumber: 33
                                             }, this)
                                         ]
                                     }, p.id, true, {
                                         fileName: "[project]/pages/admin.jsx",
-                                        lineNumber: 265,
+                                        lineNumber: 304,
                                         columnNumber: 29
                                     }, this))
                             }, void 0, false, {
                                 fileName: "[project]/pages/admin.jsx",
-                                lineNumber: 263,
+                                lineNumber: 302,
                                 columnNumber: 21
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/pages/admin.jsx",
-                        lineNumber: 255,
+                        lineNumber: 294,
                         columnNumber: 17
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/pages/admin.jsx",
-                lineNumber: 251,
+                lineNumber: 280,
                 columnNumber: 13
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/pages/admin.jsx",
-        lineNumber: 155,
+        lineNumber: 184,
         columnNumber: 9
     }, this);
 }
-_s(AdminPage, "odlbidfymBkmOLu9Zxif8OH5ASk=");
+_s(AdminPage, "Z3CsfaIq+FYUj6AN9Z6V+b5C5Gk=");
 _c = AdminPage;
 var _c;
 __turbopack_context__.k.register(_c, "AdminPage");

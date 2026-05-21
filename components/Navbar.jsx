@@ -6,11 +6,12 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useCart } from '../lib/CartContext';
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [cartCount] = useState(3); // Mock cart count
+  const { totalItems } = useCart();
 
   // Tambah shadow/blur saat scroll
   useEffect(() => {
@@ -93,12 +94,12 @@ export default function Navbar() {
                 <path d="M16 10a4 4 0 01-8 0"/>
               </svg>
               {/* Cart count badge */}
-              {cartCount > 0 && (
+              {totalItems > 0 && (
                 <span
                   className="absolute -top-1 -right-1 w-4 h-4 rounded-full text-white text-xs font-bold flex items-center justify-center"
                   style={{ background: 'var(--neon-pink)', fontSize: '10px' }}
                 >
-                  {cartCount}
+                  {totalItems}
                 </span>
               )}
             </button>

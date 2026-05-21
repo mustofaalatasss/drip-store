@@ -14,7 +14,7 @@ export default async function handler(req, res) {
 
     // === PUT: Edit produk ===
     if (req.method === 'PUT') {
-        const { name, price, stock, badge, description, discount, image } = req.body;
+        const { name, price, stock, badge = 'NONE', description = '', discount = 0, image } = req.body;
         await db.update(products)
             .set({
                 name,

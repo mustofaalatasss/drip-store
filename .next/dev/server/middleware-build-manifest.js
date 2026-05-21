@@ -1,5 +1,17 @@
 globalThis.__BUILD_MANIFEST = {
   "pages": {
+    "/": [
+      "static/chunks/[root-of-the-server]__09gqxe.._.js",
+      "static/chunks/node_modules_next_dist_compiled_0by8e_8._.js",
+      "static/chunks/node_modules_next_dist_shared_lib_02lkcsc._.js",
+      "static/chunks/node_modules_next_dist_client_0khy5ar._.js",
+      "static/chunks/node_modules_next_dist_0k8zr~w._.js",
+      "static/chunks/node_modules_next_0-xb44e._.js",
+      "static/chunks/node_modules_react-dom_0bruynb._.js",
+      "static/chunks/node_modules_11l9xip._.js",
+      "static/chunks/pages_index_07xvfw~._.js",
+      "static/chunks/turbopack-pages_index_0do2piq._.js"
+    ],
     "/_app": [
       "static/chunks/node_modules_next_dist_compiled_0o6l_m6._.js",
       "static/chunks/node_modules_next_dist_shared_lib_0n1wg2c._.js",
@@ -7,23 +19,10 @@ globalThis.__BUILD_MANIFEST = {
       "static/chunks/node_modules_next_dist_0k8zr~w._.js",
       "static/chunks/node_modules_react-dom_0bruynb._.js",
       "static/chunks/node_modules_11l9xip._.js",
-      "static/chunks/[root-of-the-server]__10_incj._.js",
+      "static/chunks/[root-of-the-server]__0uf0zce._.js",
       "static/chunks/styles_globals_0-xc3nc.css",
       "static/chunks/pages__app_07xvfw~._.js",
-      "static/chunks/turbopack-pages__app_03~zi7b._.js"
-    ],
-    "/admin": [
-      "static/chunks/node_modules_next_dist_compiled_0o6l_m6._.js",
-      "static/chunks/node_modules_next_dist_shared_lib_0n1wg2c._.js",
-      "static/chunks/node_modules_next_dist_client_0pe1dg-._.js",
-      "static/chunks/node_modules_next_dist_0k8zr~w._.js",
-      "static/chunks/node_modules_react-dom_0bruynb._.js",
-      "static/chunks/node_modules_@neondatabase_serverless_index_0yml4q2.js",
-      "static/chunks/node_modules_drizzle-orm_0z-bgzs._.js",
-      "static/chunks/node_modules_11l9xip._.js",
-      "static/chunks/[root-of-the-server]__0z~v86s._.js",
-      "static/chunks/pages_admin_07xvfw~._.js",
-      "static/chunks/turbopack-pages_admin_00rleao._.js"
+      "static/chunks/turbopack-pages__app_0zfa00o._.js"
     ]
   },
   "devFiles": [],

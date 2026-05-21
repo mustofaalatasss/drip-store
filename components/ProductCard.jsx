@@ -5,8 +5,10 @@
 // ============================================================
 
 import { useState } from 'react';
+import { useCart } from '../lib/CartContext';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useLocalStorage } from '../lib/useLocalStorage';
 
 // Helper: format harga ke Rupiah
 export function formatPrice(price) {
@@ -26,19 +28,21 @@ const badgeConfig = {
 };
 
 export default function ProductCard({ product }) {
-  const [isWishlisted, setIsWishlisted] = useState(false);
+  const [isWishlisted, setIsWishlisted] = useLocalStorage(`wishlist-${product.id}`, false);
   const [addedToCart, setAddedToCart] = useState(false);
 
   const discountedPrice = product.discount
     ? product.price * (1 - product.discount / 100)
     : product.price;
 
-  const handleAddToCart = (e) => {
+ const { addToCart } = useCart();
+
+const handleAddToCart = (e) => {
     e.preventDefault();
+    addToCart(product);
     setAddedToCart(true);
     setTimeout(() => setAddedToCart(false), 2000);
-  };
-
+};
   return (
     <Link href={`/products/${product.id}`} className="product-card group" style={{ textDecoration: 'none' }}>
       {/* === IMAGE CONTAINER === */}

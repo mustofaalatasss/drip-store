@@ -4,7 +4,7 @@
 // Akses di: localhost:3000/admin
 // ============================================================
 
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { getDb } from '../lib/db';
 import { products } from '../lib/schema';
 
@@ -43,6 +43,18 @@ export default function AdminPage({ initialProducts }) {
     const [editId, setEditId] = useState(null);
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState('');
+    const [filterKategori, setFilterKategori] = useState('semua');
+    const produkTampil = filterKategori === 'semua'     ? productList
+        : productList.filter((p) => p.category === filterKategori);
+          
+        useEffect(() => { if (message) { const timer = setTimeout(() => { setMessage(''); }, 3000); return () => clearTimeout(timer); } }, [message]);
+
+    
+        
+    const totalHarga = produkTampil.reduce((total, p) => total + p.price, 0);
+
+
+
 
     // === TAMBAH PRODUK ===
     const handleSubmit = async (e) => {
@@ -73,11 +85,16 @@ export default function AdminPage({ initialProducts }) {
     const handleDelete = async (id) => {
         if (!confirm('Yakin mau hapus produk ini?')) return;
         try {
-            await fetch(`/api/products/${id}`, { method: 'DELETE' });
-            setProductList(productList.filter((p) => p.id !== id));
-            setMessage('✓ Produk berhasil dihapus!');
+            const res = await fetch(`/api/products/${id}`, { method: 'DELETE' });
+            const data = await res.json();
+            if (data.success) {
+                setProductList(productList.filter((p) => p.id !== id));
+                setMessage('✓ Produk berhasil dihapus!');
+            } else {
+                setMessage('✗ Gagal hapus produk');
+            }
         } catch (err) {
-            setMessage('✗ Gagal hapus produk');
+            setMessage('✗ Gagal hapus produk: ' + err.message);
         }
     };
 
@@ -100,24 +117,36 @@ export default function AdminPage({ initialProducts }) {
         e.preventDefault();
         setLoading(true);
         try {
-            await fetch(`/api/products/${editId}`, {
+            const res = await fetch(`/api/products/${editId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(form),
             });
-            setMessage('✓ Produk berhasil diupdate!');
-            setProductList(productList.map((p) =>
-                p.id === editId ? { ...p, ...form } : p
-            ));
-            setEditId(null);
-            setForm({
-                name: '', price: '', image: '', stock: '',
-                category: 'streetwear', description: '', badge: '', discount: '0'
-            });
+            const data = await res.json();
+            if (data.success) {
+                setMessage('✓ Produk berhasil diupdate!');
+                setProductList(productList.map((p) =>
+                    p.id === editId ? { ...p, ...form } : p
+                ));
+                setEditId(null);
+                setForm({
+                    name: '', price: '', image: '', stock: '',
+                    category: 'streetwear', description: '', badge: '', discount: '0'
+                });
+            } else {
+                setMessage('✗ Gagal update produk');
+            }
         } catch (err) {
-            setMessage('✗ Gagal update produk');
+            setMessage('✗ Gagal update produk: ' + err.message);
         }
         setLoading(false);
+    };
+    const handleCancel = () => {
+        setEditId(null);
+        setForm({
+            name: '', price: '', image: '', stock: '',
+            category: 'streetwear', description: '', badge: '', discount: '0'
+        });
     };
 
     if (!isAuthenticated) {
@@ -237,7 +266,7 @@ export default function AdminPage({ initialProducts }) {
                         {editId && (
                             <button
                                 type="button"
-                                onClick={() => { setEditId(null); setForm({ name: '', price: '', image: '', stock: '', category: 'streetwear', description: '', badge: '', discount: '0' }); }}
+                                onClick={handleCancel}
                                 style={{ padding: '0.75rem 2rem', background: '#333', border: 'none', borderRadius: '8px', color: 'white', cursor: 'pointer' }}
                             >
                                 Batal
@@ -249,9 +278,19 @@ export default function AdminPage({ initialProducts }) {
 
             {/* === TABEL PRODUK === */}
             <div style={{ background: '#1A1A1A', borderRadius: '12px', overflow: 'hidden' }}>
-                <h2 style={{ padding: '1.5rem', color: '#FF2D87', borderBottom: '1px solid #333' }}>
-                    📦 Semua Produk ({productList.length})
+                <h2 style={{ padding: '1.5rem', color: '#FF2D87', borderBottom: '1px solid #333', display: 'flex', justifyContent: 'space-between' }}>
+                    <span>📦 Semua Produk ({productList.length})</span>
+                    <span style={{ fontSize: '1rem', color: '#00F0FF' }}>
+                        Total: Rp{totalHarga.toLocaleString()}
+                    </span>
                 </h2>
+                <div style={{ padding: '1rem 1.5rem', display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                    {['semua', 'streetwear', 'y2k', 'vintage', 'minimal', 'bold'].map((kat) => (
+                        <button key={kat} onClick={() => setFilterKategori(kat)} style={{ padding: '0.4rem 1rem', background: filterKategori === kat ? '#FF2D87' : '#333', border: 'none', borderRadius: '20px', color: 'white', cursor: 'pointer', fontWeight: filterKategori === kat ? 'bold' : 'normal' }}>
+                            {kat}
+                        </button>
+                    ))}
+                </div>
                 <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                     <thead>
                         <tr style={{ background: '#222' }}>
@@ -261,7 +300,7 @@ export default function AdminPage({ initialProducts }) {
                         </tr>
                     </thead>
                     <tbody>
-                        {productList.map((p) => (
+                        {produkTampil.map((p) => (
                             <tr key={p.id} style={{ borderBottom: '1px solid #222' }}>
                                 <td style={{ padding: '1rem', color: '#666' }}>{p.id}</td>
                                 <td style={{ padding: '1rem' }}>{p.name}</td>

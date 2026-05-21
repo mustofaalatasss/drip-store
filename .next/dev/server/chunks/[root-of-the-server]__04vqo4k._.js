@@ -119,7 +119,7 @@ async function handler(req, res) {
     }
     // === PUT: Edit produk ===
     if (req.method === 'PUT') {
-        const { name, price, stock, badge, description, discount, image } = req.body;
+        const { name, price, stock, badge = 'NONE', description = '', discount = 0, image } = req.body;
         await db.update(__TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$schema$2e$js__$5b$api$5d$__$28$ecmascript$29$__["products"]).set({
             name,
             price: parseFloat(price),

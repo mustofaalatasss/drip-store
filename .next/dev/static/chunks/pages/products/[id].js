@@ -6,7 +6,7 @@ __turbopack_load_page_chunks__("/products/[id]", [
   "static/chunks/node_modules_next_link_05n85hx.js",
   "static/chunks/node_modules_react-dom_0bruynb._.js",
   "static/chunks/node_modules_11l9xip._.js",
-  "static/chunks/[root-of-the-server]__0n.em0a._.js",
+  "static/chunks/[root-of-the-server]__0kday6q._.js",
   "static/chunks/pages_products_[id]_jsx_07xvfw~._.js",
-  "static/chunks/turbopack-pages_products_[id]_jsx_05f8cd9._.js"
+  "static/chunks/turbopack-pages_products_[id]_jsx_0j47hyx._.js"
 ])
