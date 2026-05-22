@@ -13,6 +13,9 @@ const CATEGORIES = ['All', 'Streetwear', 'Y2K', 'Vintage', 'Minimal', 'Bold'];
 export default function ProductGrid({ products = [] }) {
   const [activeCategory, setActiveCategory] = useState('All');
   const [sortBy, setSortBy] = useState('featured');
+  const [minPrice, setMinPrice] = useState('');
+  const [maxPrice, setMaxPrice] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
 
   // Filter produk berdasarkan kategori aktif
   const filteredProducts = products.filter((p) => {
@@ -20,13 +23,19 @@ export default function ProductGrid({ products = [] }) {
     return p.category.toLowerCase() === activeCategory.toLowerCase();
   });
 
-  // Sort produk
-  const sortedProducts = [...filteredProducts].sort((a, b) => {
+// Search
+const searchedProducts = filteredProducts.filter((p) => p.name.toLowerCase().includes(searchQuery.toLowerCase()));
+
+// Filter harga
+const priceFilteredProducts = searchedProducts.filter((p) => { const min = minPrice ? parseInt(minPrice) : 0; const max = maxPrice ? parseInt(maxPrice) : Infinity; return p.price >= min && p.price <= max; });
+
+// Sort produk
+const sortedProducts = [...priceFilteredProducts].sort((a, b) => {
     if (sortBy === 'price-low') return a.price - b.price;
     if (sortBy === 'price-high') return b.price - a.price;
     if (sortBy === 'rating') return b.rating - a.rating;
     return (b.isFeatured ? 1 : 0) - (a.isFeatured ? 1 : 0);
-  });
+});
 
   return (
     <section id="products" className="py-24 md:py-32" style={{ background: 'var(--bg-900)' }}>
@@ -69,7 +78,19 @@ export default function ProductGrid({ products = [] }) {
               <option value="rating" style={{ background: '#1A1A1A' }}>Top Rated</option>
             </select>
           </div>
-        </div>
+        </div> 
+
+        {/* Search & Filter Harga */}
+<div className="flex flex-wrap gap-4 mb-8">
+    <input type="text" placeholder="🔍 Search produk..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="w-full md:w-72 px-5 py-3 rounded-xl text-white text-sm" style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', outline: 'none' }} />
+    <div className="flex items-center gap-3">
+        <span className="text-sm text-white/40">Harga:</span>
+        <input type="number" placeholder="Min" value={minPrice} onChange={(e) => setMinPrice(e.target.value)} className="w-28 px-4 py-3 rounded-xl text-white text-sm" style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', outline: 'none' }} />
+        <span className="text-white/40">—</span>
+        <input type="number" placeholder="Max" value={maxPrice} onChange={(e) => setMaxPrice(e.target.value)} className="w-28 px-4 py-3 rounded-xl text-white text-sm" style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', outline: 'none' }} />
+        {(minPrice || maxPrice) && <button onClick={() => { setMinPrice(''); setMaxPrice(''); }} style={{ color: '#FF2D87', fontSize: '0.85rem', cursor: 'pointer', background: 'none', border: 'none' }}>Reset</button>}
+    </div>
+</div>
 
         {/* === CATEGORY FILTER TABS === */}
         <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-4 mb-10">

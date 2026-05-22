@@ -480,23 +480,42 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$ind
 ;
 var _s = __turbopack_context__.k.signature(), _s1 = __turbopack_context__.k.signature();
 ;
-// 1. Buat "gudang" data
 const CartContext = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["createContext"])();
 function CartProvider({ children }) {
     _s();
     const [cart, setCart] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])([]);
-    // Tambah produk ke keranjang
+    // Load cart dari localStorage saat pertama buka
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "CartProvider.useEffect": ()=>{
+            try {
+                const saved = window.localStorage.getItem('drip-cart');
+                if (saved) setCart(JSON.parse(saved));
+            } catch (err) {
+                console.log(err);
+            }
+        }
+    }["CartProvider.useEffect"], []);
+    // Simpan cart ke localStorage setiap berubah
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "CartProvider.useEffect": ()=>{
+            try {
+                window.localStorage.setItem('drip-cart', JSON.stringify(cart));
+            } catch (err) {
+                console.log(err);
+            }
+        }
+    }["CartProvider.useEffect"], [
+        cart
+    ]);
     const addToCart = (product)=>{
         setCart((prev)=>{
             const exists = prev.find((item)=>item.id === product.id);
             if (exists) {
-                // kalau sudah ada, tambah quantity
                 return prev.map((item)=>item.id === product.id ? {
                         ...item,
                         quantity: item.quantity + 1
                     } : item);
             }
-            // kalau belum ada, tambah baru
             return [
                 ...prev,
                 {
@@ -506,22 +525,25 @@ function CartProvider({ children }) {
             ];
         });
     };
-    // Hitung total item di keranjang
+    const removeFromCart = (productId)=>{
+        setCart((prev)=>prev.filter((item)=>item.id !== productId));
+    };
     const totalItems = cart.reduce((total, item)=>total + item.quantity, 0);
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(CartContext.Provider, {
         value: {
             cart,
             addToCart,
-            totalItems
+            totalItems,
+            removeFromCart
         },
         children: children
     }, void 0, false, {
         fileName: "[project]/lib/CartContext.js",
-        lineNumber: 32,
+        lineNumber: 45,
         columnNumber: 9
     }, this);
 }
-_s(CartProvider, "ZqFaEIYkzI5UoYUmTgmqHbYYm/0=");
+_s(CartProvider, "gPYbNUmWK8tVVPcrFDrHV23HVlE=");
 _c = CartProvider;
 function useCart() {
     _s1();
@@ -726,7 +748,8 @@ function Navbar() {
                                     lineNumber: 82,
                                     columnNumber: 13
                                 }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"], {
+                                    href: "/checkout",
                                     className: "relative flex w-9 h-9 items-center justify-center rounded-xl text-white/60 hover:text-white hover:bg-white/5 transition-all duration-200",
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
@@ -743,8 +766,8 @@ function Navbar() {
                                                     d: "M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/Navbar.jsx",
-                                                    lineNumber: 92,
-                                                    columnNumber: 17
+                                                    lineNumber: 93,
+                                                    columnNumber: 9
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("line", {
                                                     x1: "3",
@@ -753,21 +776,21 @@ function Navbar() {
                                                     y2: "6"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/Navbar.jsx",
-                                                    lineNumber: 93,
-                                                    columnNumber: 17
+                                                    lineNumber: 94,
+                                                    columnNumber: 9
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
                                                     d: "M16 10a4 4 0 01-8 0"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/Navbar.jsx",
-                                                    lineNumber: 94,
-                                                    columnNumber: 17
+                                                    lineNumber: 95,
+                                                    columnNumber: 9
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/Navbar.jsx",
-                                            lineNumber: 91,
-                                            columnNumber: 15
+                                            lineNumber: 92,
+                                            columnNumber: 5
                                         }, this),
                                         totalItems > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                             className: "absolute -top-1 -right-1 w-4 h-4 rounded-full text-white text-xs font-bold flex items-center justify-center",
@@ -779,13 +802,13 @@ function Navbar() {
                                         }, void 0, false, {
                                             fileName: "[project]/components/Navbar.jsx",
                                             lineNumber: 98,
-                                            columnNumber: 17
+                                            columnNumber: 9
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/Navbar.jsx",
-                                    lineNumber: 90,
-                                    columnNumber: 13
+                                    lineNumber: 91,
+                                    columnNumber: 1
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"], {
                                     href: "#products",
@@ -800,7 +823,7 @@ function Navbar() {
                                     children: "Shop Now"
                                 }, void 0, false, {
                                     fileName: "[project]/components/Navbar.jsx",
-                                    lineNumber: 108,
+                                    lineNumber: 105,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -811,27 +834,27 @@ function Navbar() {
                                             className: `block w-5 h-0.5 bg-white transition-all duration-300 ${mobileOpen ? 'rotate-45 translate-y-2' : ''}`
                                         }, void 0, false, {
                                             fileName: "[project]/components/Navbar.jsx",
-                                            lineNumber: 127,
+                                            lineNumber: 124,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                             className: `block w-5 h-0.5 bg-white transition-all duration-300 ${mobileOpen ? 'opacity-0' : ''}`
                                         }, void 0, false, {
                                             fileName: "[project]/components/Navbar.jsx",
-                                            lineNumber: 130,
+                                            lineNumber: 127,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                             className: `block w-5 h-0.5 bg-white transition-all duration-300 ${mobileOpen ? '-rotate-45 -translate-y-2' : ''}`
                                         }, void 0, false, {
                                             fileName: "[project]/components/Navbar.jsx",
-                                            lineNumber: 133,
+                                            lineNumber: 130,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/Navbar.jsx",
-                                    lineNumber: 123,
+                                    lineNumber: 120,
                                     columnNumber: 13
                                 }, this)
                             ]
@@ -858,7 +881,7 @@ function Navbar() {
                                     children: link.label
                                 }, link.label, false, {
                                     fileName: "[project]/components/Navbar.jsx",
-                                    lineNumber: 148,
+                                    lineNumber: 145,
                                     columnNumber: 15
                                 }, this)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"], {
@@ -871,18 +894,18 @@ function Navbar() {
                                 children: "Shop Now"
                             }, void 0, false, {
                                 fileName: "[project]/components/Navbar.jsx",
-                                lineNumber: 157,
+                                lineNumber: 154,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/Navbar.jsx",
-                        lineNumber: 146,
+                        lineNumber: 143,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/components/Navbar.jsx",
-                    lineNumber: 141,
+                    lineNumber: 138,
                     columnNumber: 9
                 }, this)
             ]
@@ -1757,14 +1780,25 @@ function ProductGrid({ products = [] }) {
     _s();
     const [activeCategory, setActiveCategory] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])('All');
     const [sortBy, setSortBy] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])('featured');
+    const [minPrice, setMinPrice] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])('');
+    const [maxPrice, setMaxPrice] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])('');
+    const [searchQuery, setSearchQuery] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])('');
     // Filter produk berdasarkan kategori aktif
     const filteredProducts = products.filter((p)=>{
         if (activeCategory === 'All') return true;
         return p.category.toLowerCase() === activeCategory.toLowerCase();
     });
+    // Search
+    const searchedProducts = filteredProducts.filter((p)=>p.name.toLowerCase().includes(searchQuery.toLowerCase()));
+    // Filter harga
+    const priceFilteredProducts = searchedProducts.filter((p)=>{
+        const min = minPrice ? parseInt(minPrice) : 0;
+        const max = maxPrice ? parseInt(maxPrice) : Infinity;
+        return p.price >= min && p.price <= max;
+    });
     // Sort produk
     const sortedProducts = [
-        ...filteredProducts
+        ...priceFilteredProducts
     ].sort((a, b)=>{
         if (sortBy === 'price-low') return a.price - b.price;
         if (sortBy === 'price-high') return b.price - a.price;
@@ -1793,14 +1827,14 @@ function ProductGrid({ products = [] }) {
                                             children: "🛍️"
                                         }, void 0, false, {
                                             fileName: "[project]/components/ProductGrid.jsx",
-                                            lineNumber: 39,
+                                            lineNumber: 48,
                                             columnNumber: 15
                                         }, this),
                                         " Latest Drops"
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/ProductGrid.jsx",
-                                    lineNumber: 38,
+                                    lineNumber: 47,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
@@ -1820,25 +1854,25 @@ function ProductGrid({ products = [] }) {
                                             children: "Fits"
                                         }, void 0, false, {
                                             fileName: "[project]/components/ProductGrid.jsx",
-                                            lineNumber: 45,
+                                            lineNumber: 54,
                                             columnNumber: 21
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("br", {}, void 0, false, {
                                             fileName: "[project]/components/ProductGrid.jsx",
-                                            lineNumber: 53,
+                                            lineNumber: 62,
                                             columnNumber: 15
                                         }, this),
                                         "Just Landed."
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/ProductGrid.jsx",
-                                    lineNumber: 41,
+                                    lineNumber: 50,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/ProductGrid.jsx",
-                            lineNumber: 37,
+                            lineNumber: 46,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1849,7 +1883,7 @@ function ProductGrid({ products = [] }) {
                                     children: "Sort:"
                                 }, void 0, false, {
                                     fileName: "[project]/components/ProductGrid.jsx",
-                                    lineNumber: 59,
+                                    lineNumber: 68,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -1868,7 +1902,7 @@ function ProductGrid({ products = [] }) {
                                             children: "Featured"
                                         }, void 0, false, {
                                             fileName: "[project]/components/ProductGrid.jsx",
-                                            lineNumber: 66,
+                                            lineNumber: 75,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1879,7 +1913,7 @@ function ProductGrid({ products = [] }) {
                                             children: "Price: Low to High"
                                         }, void 0, false, {
                                             fileName: "[project]/components/ProductGrid.jsx",
-                                            lineNumber: 67,
+                                            lineNumber: 76,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1890,7 +1924,7 @@ function ProductGrid({ products = [] }) {
                                             children: "Price: High to Low"
                                         }, void 0, false, {
                                             fileName: "[project]/components/ProductGrid.jsx",
-                                            lineNumber: 68,
+                                            lineNumber: 77,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1901,26 +1935,126 @@ function ProductGrid({ products = [] }) {
                                             children: "Top Rated"
                                         }, void 0, false, {
                                             fileName: "[project]/components/ProductGrid.jsx",
-                                            lineNumber: 69,
+                                            lineNumber: 78,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/ProductGrid.jsx",
-                                    lineNumber: 60,
+                                    lineNumber: 69,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/ProductGrid.jsx",
-                            lineNumber: 58,
+                            lineNumber: 67,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/ProductGrid.jsx",
-                    lineNumber: 36,
+                    lineNumber: 45,
                     columnNumber: 9
+                }, this),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: "flex flex-wrap gap-4 mb-8",
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                            type: "text",
+                            placeholder: "🔍 Search produk...",
+                            value: searchQuery,
+                            onChange: (e)=>setSearchQuery(e.target.value),
+                            className: "w-full md:w-72 px-5 py-3 rounded-xl text-white text-sm",
+                            style: {
+                                background: 'rgba(255,255,255,0.05)',
+                                border: '1px solid rgba(255,255,255,0.1)',
+                                outline: 'none'
+                            }
+                        }, void 0, false, {
+                            fileName: "[project]/components/ProductGrid.jsx",
+                            lineNumber: 85,
+                            columnNumber: 5
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "flex items-center gap-3",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                    className: "text-sm text-white/40",
+                                    children: "Harga:"
+                                }, void 0, false, {
+                                    fileName: "[project]/components/ProductGrid.jsx",
+                                    lineNumber: 87,
+                                    columnNumber: 9
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                    type: "number",
+                                    placeholder: "Min",
+                                    value: minPrice,
+                                    onChange: (e)=>setMinPrice(e.target.value),
+                                    className: "w-28 px-4 py-3 rounded-xl text-white text-sm",
+                                    style: {
+                                        background: 'rgba(255,255,255,0.05)',
+                                        border: '1px solid rgba(255,255,255,0.1)',
+                                        outline: 'none'
+                                    }
+                                }, void 0, false, {
+                                    fileName: "[project]/components/ProductGrid.jsx",
+                                    lineNumber: 88,
+                                    columnNumber: 9
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                    className: "text-white/40",
+                                    children: "—"
+                                }, void 0, false, {
+                                    fileName: "[project]/components/ProductGrid.jsx",
+                                    lineNumber: 89,
+                                    columnNumber: 9
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                    type: "number",
+                                    placeholder: "Max",
+                                    value: maxPrice,
+                                    onChange: (e)=>setMaxPrice(e.target.value),
+                                    className: "w-28 px-4 py-3 rounded-xl text-white text-sm",
+                                    style: {
+                                        background: 'rgba(255,255,255,0.05)',
+                                        border: '1px solid rgba(255,255,255,0.1)',
+                                        outline: 'none'
+                                    }
+                                }, void 0, false, {
+                                    fileName: "[project]/components/ProductGrid.jsx",
+                                    lineNumber: 90,
+                                    columnNumber: 9
+                                }, this),
+                                (minPrice || maxPrice) && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                    onClick: ()=>{
+                                        setMinPrice('');
+                                        setMaxPrice('');
+                                    },
+                                    style: {
+                                        color: '#FF2D87',
+                                        fontSize: '0.85rem',
+                                        cursor: 'pointer',
+                                        background: 'none',
+                                        border: 'none'
+                                    },
+                                    children: "Reset"
+                                }, void 0, false, {
+                                    fileName: "[project]/components/ProductGrid.jsx",
+                                    lineNumber: 91,
+                                    columnNumber: 36
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/components/ProductGrid.jsx",
+                            lineNumber: 86,
+                            columnNumber: 5
+                        }, this)
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/components/ProductGrid.jsx",
+                    lineNumber: 84,
+                    columnNumber: 1
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                     className: "flex gap-2 overflow-x-auto scrollbar-hide pb-4 mb-10",
@@ -1937,12 +2071,12 @@ function ProductGrid({ products = [] }) {
                             children: cat
                         }, cat, false, {
                             fileName: "[project]/components/ProductGrid.jsx",
-                            lineNumber: 77,
+                            lineNumber: 98,
                             columnNumber: 13
                         }, this))
                 }, void 0, false, {
                     fileName: "[project]/components/ProductGrid.jsx",
-                    lineNumber: 75,
+                    lineNumber: 96,
                     columnNumber: 9
                 }, this),
                 sortedProducts.length > 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1955,17 +2089,17 @@ function ProductGrid({ products = [] }) {
                                 product: product
                             }, void 0, false, {
                                 fileName: "[project]/components/ProductGrid.jsx",
-                                lineNumber: 106,
+                                lineNumber: 127,
                                 columnNumber: 17
                             }, this)
                         }, product.id, false, {
                             fileName: "[project]/components/ProductGrid.jsx",
-                            lineNumber: 100,
+                            lineNumber: 121,
                             columnNumber: 15
                         }, this))
                 }, void 0, false, {
                     fileName: "[project]/components/ProductGrid.jsx",
-                    lineNumber: 98,
+                    lineNumber: 119,
                     columnNumber: 11
                 }, this) : /* Empty state */ /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                     className: "text-center py-24",
@@ -1975,7 +2109,7 @@ function ProductGrid({ products = [] }) {
                             children: "👕"
                         }, void 0, false, {
                             fileName: "[project]/components/ProductGrid.jsx",
-                            lineNumber: 113,
+                            lineNumber: 134,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -1986,7 +2120,7 @@ function ProductGrid({ products = [] }) {
                             children: "No fits found"
                         }, void 0, false, {
                             fileName: "[project]/components/ProductGrid.jsx",
-                            lineNumber: 114,
+                            lineNumber: 135,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1994,13 +2128,13 @@ function ProductGrid({ products = [] }) {
                             children: "Try a different category"
                         }, void 0, false, {
                             fileName: "[project]/components/ProductGrid.jsx",
-                            lineNumber: 120,
+                            lineNumber: 141,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/ProductGrid.jsx",
-                    lineNumber: 112,
+                    lineNumber: 133,
                     columnNumber: 11
                 }, this),
                 sortedProducts.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2028,38 +2162,38 @@ function ProductGrid({ products = [] }) {
                                     d: "M12 5v14M5 12l7 7 7-7"
                                 }, void 0, false, {
                                     fileName: "[project]/components/ProductGrid.jsx",
-                                    lineNumber: 142,
+                                    lineNumber: 163,
                                     columnNumber: 17
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/components/ProductGrid.jsx",
-                                lineNumber: 141,
+                                lineNumber: 162,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/ProductGrid.jsx",
-                        lineNumber: 129,
+                        lineNumber: 150,
                         columnNumber: 13
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/components/ProductGrid.jsx",
-                    lineNumber: 128,
+                    lineNumber: 149,
                     columnNumber: 11
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/components/ProductGrid.jsx",
-            lineNumber: 33,
+            lineNumber: 42,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/components/ProductGrid.jsx",
-        lineNumber: 32,
+        lineNumber: 41,
         columnNumber: 5
     }, this);
 }
-_s(ProductGrid, "vRUywkfIbNF9UUyxAIcbjRzyku8=");
+_s(ProductGrid, "xCirYao5Q7NXteJNbNqxlQzE+o4=");
 _c = ProductGrid;
 var _c;
 __turbopack_context__.k.register(_c, "ProductGrid");
