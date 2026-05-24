@@ -46,11 +46,21 @@ const newsletter = pgTable('newsletter', {
     email: text('email').notNull().unique(),
     subscribedAt: timestamp('subscribed_at').defaultNow()
 });
+// === TABEL: USERS ===
+const users = pgTable('users', {
+    id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
+    name: text('name').notNull(),
+    email: text('email').notNull().unique(),
+    password: text('password').notNull(),
+    role: text('role').default('user'),
+    createdAt: timestamp('created_at').defaultNow()
+});
 module.exports = {
     products,
     categories,
     testimonials,
-    newsletter
+    newsletter,
+    users
 };
 }),
 "[project]/lib/db.js [ssr] (ecmascript)", ((__turbopack_context__, module, exports) => {

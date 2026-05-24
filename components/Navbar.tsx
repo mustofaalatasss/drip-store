@@ -106,6 +106,15 @@ const navLinks: NavLink[] = [
     )}
 </Link>
 
+           {/* Login Button */}
+<Link
+    href="/login"
+    className="hidden md:inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-white/70 hover:text-white transition-all duration-300"
+    style={{ border: '1px solid rgba(255,255,255,0.15)' }}
+>
+    Login
+</Link>
+
             {/* CTA Button (Desktop) */}
             <Link
               href="#products"
