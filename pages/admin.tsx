@@ -6,6 +6,7 @@
 import { useState, useEffect } from 'react';
 import { Product, ProductForm } from '../lib/types';
 
+
 export async function getServerSideProps() {
     try {
         const { getDb } = require('../lib/db');
@@ -74,7 +75,11 @@ export default function AdminPage({ initialProducts }: { initialProducts: Produc
     const handleDelete = async (id: number) => {
         if (!confirm('Yakin mau hapus produk ini?')) return;
         try {
-            const res = await fetch(`/api/products/${id}`, { method: 'DELETE' });
+            const res = await fetch(`/api/products/${id}`, {
+                method: 'DELETE', headers: {
+                    'x-admin-password': process.env.NEXT_PUBLIC_ADMIN_PASSWORD || '',
+                },
+            });
             const data = await res.json();
             if (data.success) {
                 setProductList(productList.filter((p) => p.id !== id));
@@ -86,6 +91,7 @@ export default function AdminPage({ initialProducts }: { initialProducts: Produc
             setMessage('✗ Gagal hapus produk');
         }
     };
+
 
     const handleEdit = (product: Product) => {
         setEditId(product.id);
@@ -106,10 +112,13 @@ export default function AdminPage({ initialProducts }: { initialProducts: Produc
         setLoading(true);
         try {
             const res = await fetch(`/api/products/${editId}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
+                method: 'PUT', headers: {
+                    'Content-Type': 'application/json',
+                    'x-admin-password': process.env.NEXT_PUBLIC_ADMIN_PASSWORD || '',
+                },
                 body: JSON.stringify(form),
             });
+
             const data = await res.json();
             if (data.success) {
                 setMessage('✓ Produk berhasil diupdate!');
@@ -142,8 +151,13 @@ export default function AdminPage({ initialProducts }: { initialProducts: Produc
                         style={{ width: '100%', padding: '0.75rem', background: '#222', border: '1px solid #333', borderRadius: '8px', color: 'white', marginBottom: '1rem' }}
                     />
                     <button
-                        onClick={() => { if (password === 'Kamu1234561') { setIsAuthenticated(true); } else { alert('Password salah!'); } }}
-                        style={{ width: '100%', padding: '0.75rem', background: '#FF2D87', border: 'none', borderRadius: '8px', color: 'white', fontWeight: 'bold', cursor: 'pointer' }}
+                        onClick={() => {
+                            if (password === process.env.NEXT_PUBLIC_ADMIN_PASSWORD) {
+                                setIsAuthenticated(true);
+                            } else {
+                                alert('Password salah!');
+                            }
+                        }}
                     >
                         Login
                     </button>

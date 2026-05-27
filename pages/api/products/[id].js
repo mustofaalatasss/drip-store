@@ -5,7 +5,13 @@ import { eq } from 'drizzle-orm';
 export default async function handler(req, res) {
     const db = getDb();
     const { id } = req.query;
-
+    // Proteksi DELETE dan PUT
+    if (req.method === 'DELETE' || req.method === 'PUT') {
+        const adminPassword = req.headers['x-admin-password'];
+        if (adminPassword !== process.env.ADMIN_PASSWORD) {
+            return res.status(401).json({ success: false, error: 'Unauthorized' });
+        }
+    }
     // === DELETE: Hapus produk ===
     if (req.method === 'DELETE') {
         await db.delete(products).where(eq(products.id, parseInt(id)));
