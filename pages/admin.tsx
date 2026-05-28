@@ -34,7 +34,7 @@ const EMPTY_FORM: ProductForm = {
 };
 
 export default function AdminPage({ initialProducts }: { initialProducts: Product[] }) {
-    console.log('ENV PASSWORD:', process.env.NEXT_PUBLIC_ADMIN_PASSWORD)
+
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
     const [password, setPassword] = useState<string>('');
     const [productList, setProductList] = useState<Product[]>(initialProducts);
