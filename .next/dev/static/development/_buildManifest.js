@@ -2,9 +2,6 @@ self.__BUILD_MANIFEST = {
   "/": [
     "static/chunks/pages/index.js"
   ],
-  "/checkout": [
-    "static/chunks/pages/checkout.js"
-  ],
   "/login": [
     "static/chunks/pages/login.js"
   ],

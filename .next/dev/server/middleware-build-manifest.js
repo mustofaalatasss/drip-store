@@ -24,18 +24,6 @@ globalThis.__BUILD_MANIFEST = {
       "static/chunks/pages__app_07xvfw~._.js",
       "static/chunks/turbopack-pages__app_03qkse_._.js"
     ],
-    "/checkout": [
-      "static/chunks/node_modules_next_dist_compiled_0o6l_m6._.js",
-      "static/chunks/node_modules_next_dist_shared_lib_081a.5c._.js",
-      "static/chunks/node_modules_next_dist_client_00_u_l7._.js",
-      "static/chunks/node_modules_next_dist_0k8zr~w._.js",
-      "static/chunks/node_modules_next_link_05n85hx.js",
-      "static/chunks/node_modules_react-dom_0bruynb._.js",
-      "static/chunks/node_modules_11l9xip._.js",
-      "static/chunks/[root-of-the-server]__0halu9z._.js",
-      "static/chunks/pages_checkout_07xvfw~._.js",
-      "static/chunks/turbopack-pages_checkout_0fq~mkl._.js"
-    ],
     "/login": [
       "static/chunks/node_modules_next_dist_compiled_0o6l_m6._.js",
       "static/chunks/node_modules_next_dist_shared_lib_081a.5c._.js",
