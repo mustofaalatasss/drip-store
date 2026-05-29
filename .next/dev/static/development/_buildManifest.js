@@ -2,8 +2,8 @@ self.__BUILD_MANIFEST = {
   "/": [
     "static/chunks/pages/index.js"
   ],
-  "/login": [
-    "static/chunks/pages/login.js"
+  "/admin": [
+    "static/chunks/pages/admin.js"
   ],
   "__rewrites": {
     "afterFiles": [],
@@ -21,6 +21,7 @@ self.__BUILD_MANIFEST = {
     "/api/products",
     "/api/products/[id]",
     "/api/register",
+    "/api/upload",
     "/checkout",
     "/login",
     "/products/[id]"

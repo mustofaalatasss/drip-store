@@ -43,6 +43,32 @@ export default function AdminPage({ initialProducts }: { initialProducts: Produc
     const [loading, setLoading] = useState<boolean>(false);
     const [message, setMessage] = useState<string>('');
     const [filterKategori, setFilterKategori] = useState<string>('semua');
+    const [uploading, setUploading] = useState(false);
+
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        setUploading(true);
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = async () => {
+            try {
+                const res = await fetch('/api/upload', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ image: reader.result }),
+                });
+                const data = await res.json();
+                if (data.success) {
+                    setForm({ ...form, image: data.url });
+                    setMessage('✓ Gambar berhasil diupload!');
+                }
+            } catch (err) {
+                setMessage('✗ Upload gagal');
+            }
+            setUploading(false);
+        };
+    };
 
     const produkTampil = filterKategori === 'semua' ? productList : productList.filter((p) => p.category === filterKategori);
     const totalHarga = produkTampil.reduce((total, p) => total + p.price, 0);
@@ -188,7 +214,6 @@ export default function AdminPage({ initialProducts }: { initialProducts: Produc
                         {[
                             { label: 'Nama Produk', key: 'name', type: 'text' },
                             { label: 'Harga', key: 'price', type: 'number' },
-                            { label: 'Link Gambar', key: 'image', type: 'text' },
                             { label: 'Stok', key: 'stock', type: 'number' },
                             { label: 'Deskripsi', key: 'description', type: 'text' },
                             { label: 'Diskon (%)', key: 'discount', type: 'number' },
@@ -199,11 +224,43 @@ export default function AdminPage({ initialProducts }: { initialProducts: Produc
                                     type={field.type}
                                     value={form[field.key as keyof ProductForm]}
                                     onChange={(e) => setForm({ ...form, [field.key]: e.target.value })}
-                                    required={['name', 'price', 'image', 'stock'].includes(field.key)}
+                                    required={['name', 'price', 'stock'].includes(field.key)}
                                     style={{ width: '100%', padding: '0.75rem', background: '#222', border: '1px solid #333', borderRadius: '8px', color: 'white' }}
                                 />
                             </div>
                         ))}
+                        <div>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', color: '#999', fontSize: '0.85rem' }}>
+                                Gambar Produk
+                            </label>
+                            {form.image && (
+                                <img
+                                    src={form.image}
+                                    alt="preview"
+                                    style={{ width: '100%', height: '150px', objectFit: 'cover', borderRadius: '8px', marginBottom: '0.5rem' }}
+                                />
+                            )}
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={handleImageUpload}
+                                style={{ width: '100%', padding: '0.75rem', background: '#222', border: '1px solid #333', borderRadius: '8px', color: 'white' }}
+                            />
+                            {uploading && (
+                                <p style={{ color: '#FF2D87', fontSize: '0.85rem', marginTop: '0.5rem' }}>
+                                    Mengupload gambar...
+                                </p>
+                            )}
+                            <p style={{ color: '#666', fontSize: '0.8rem', textAlign: 'center', margin: '0.5rem 0' }}>— atau isi URL gambar —</p>
+                            <input
+                                type="text"
+                                placeholder="https://images.unsplash.com/..."
+                                value={form.image}
+                                onChange={(e) => setForm({ ...form, image: e.target.value })}
+                                style={{ width: '100%', padding: '0.75rem', background: '#222', border: '1px solid #333', borderRadius: '8px', color: 'white' }}
+                            />
+                        </div>
+
                         <div>
                             <label style={{ display: 'block', marginBottom: '0.5rem', color: '#999', fontSize: '0.85rem' }}>Kategori</label>
                             <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} style={{ width: '100%', padding: '0.75rem', background: '#222', border: '1px solid #333', borderRadius: '8px', color: 'white' }}>
