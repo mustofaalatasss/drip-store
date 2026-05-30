@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 
 export default function CheckoutPage() {
-    const { cart, totalItems,removeFromCart } = useCart();
+    const { cart, totalItems, removeFromCart } = useCart();
     const [form, setForm] = useState<CheckoutForm>({ nama: '', alamat: '', hp: '' });
 
     const totalHarga = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
@@ -16,7 +16,7 @@ export default function CheckoutPage() {
         }
         const pesanan = cart.map((item) => `- ${item.name} x${item.quantity} = Rp${(item.price * item.quantity).toLocaleString('id-ID')}`).join('\n');
         const pesan = `Halo, saya mau order:\n\n${pesanan}\n\nTotal: Rp${totalHarga.toLocaleString('id-ID')}\n\nNama: ${form.nama}\nAlamat: ${form.alamat}\nHP: ${form.hp}`;
-        window.open(`https://api.whatsapp.com/send?phone=6287868036735`, '_blank');
+        window.open(`https://api.whatsapp.com/send?phone=6287868036735&text=${encodeURIComponent(pesan)}`, '_blank');
     };
 
     if (totalItems === 0) {
@@ -61,18 +61,18 @@ export default function CheckoutPage() {
                     </div>
 
                     {cart.map((item) => (
-    <div key={item.id} style={{ display: 'flex', gap: '1rem', marginBottom: '1rem', background: '#1A1A1A', padding: '1rem', borderRadius: '12px', alignItems: 'center' }}>
-        <img src={item.image} alt={item.name} style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius: '8px' }} />
-        <div style={{ flex: 1 }}>
-            <div style={{ fontWeight: 'bold', fontSize: '0.9rem' }}>{item.name}</div>
-            <div style={{ color: '#999', fontSize: '0.8rem' }}>x{item.quantity}</div>
-            <div style={{ color: '#FF2D87', fontSize: '0.9rem' }}>Rp{(item.price * item.quantity).toLocaleString('id-ID')}</div>
-        </div>
-        <button onClick={() => removeFromCart(item.id)} style={{ background: 'none', border: '1px solid #FF2D87', color: '#FF2D87', borderRadius: '8px', padding: '0.4rem 0.8rem', cursor: 'pointer', fontSize: '0.8rem' }}>
-            Hapus
-        </button>
-    </div>
-))}
+                        <div key={item.id} style={{ display: 'flex', gap: '1rem', marginBottom: '1rem', background: '#1A1A1A', padding: '1rem', borderRadius: '12px', alignItems: 'center' }}>
+                            <img src={item.image} alt={item.name} style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius: '8px' }} />
+                            <div style={{ flex: 1 }}>
+                                <div style={{ fontWeight: 'bold', fontSize: '0.9rem' }}>{item.name}</div>
+                                <div style={{ color: '#999', fontSize: '0.8rem' }}>x{item.quantity}</div>
+                                <div style={{ color: '#FF2D87', fontSize: '0.9rem' }}>Rp{(item.price * item.quantity).toLocaleString('id-ID')}</div>
+                            </div>
+                            <button onClick={() => removeFromCart(item.id)} style={{ background: 'none', border: '1px solid #FF2D87', color: '#FF2D87', borderRadius: '8px', padding: '0.4rem 0.8rem', cursor: 'pointer', fontSize: '0.8rem' }}>
+                                Hapus
+                            </button>
+                        </div>
+                    ))}
 
                     {/* Form */}
                     <div>
