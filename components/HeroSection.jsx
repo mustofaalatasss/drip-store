@@ -35,6 +35,24 @@ export default function HeroSection() {
       className="relative min-h-screen flex items-center overflow-hidden"
       style={{ background: 'linear-gradient(135deg, #0A0A0A 0%, #1A0A2E 50%, #0A0A0A 100%)' }}
     >
+      {/* === BACKGROUND VIDEO === */}
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+        style={{ zIndex: 0 }}
+      >
+        <source src="/hero-bg.mp4" type="video/mp4" />
+      </video>
+
+      {/* Dark Overlay */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{ backgroundColor: 'rgba(0, 0, 0, 0.6)', zIndex: 0 }}
+      />
+
       {/* === BACKGROUND EFFECTS === */}
 
       {/* Gradient orbs (neon glow spots) */}
@@ -112,12 +130,13 @@ export default function HeroSection() {
       )}
 
       {/* === MAIN CONTENT === */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 md:py-40 w-full">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 md:py-40 w-full">
         <div className="max-w-5xl">
 
           {/* Kicker / eyebrow text */}
           <div
-            className={`section-badge mb-6 transition-all duration-700 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+            className="section-badge mb-6 animate-fade-in-down"
+            style={{ animationDelay: '0.2s' }}
           >
             <span style={{ color: 'var(--neon-pink)' }}>⚡</span>
             SS25 Collection — Out Now
@@ -125,31 +144,39 @@ export default function HeroSection() {
 
           {/* === MAIN HEADLINE === */}
           <h1
-            className={`font-display font-800 leading-none tracking-tight transition-all duration-700 delay-100 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+            className="font-display font-800 leading-none tracking-tight"
             style={{ fontFamily: 'var(--font-display)' }}
           >
             {/* Line 1 */}
-            <span className="block text-5xl sm:text-7xl md:text-8xl lg:text-9xl text-white mb-2">
+            <span
+              className="block text-5xl sm:text-7xl md:text-8xl lg:text-9xl text-white mb-2 animate-fade-in-left"
+              style={{ animationDelay: '0.4s' }}
+            >
               BE
             </span>
 
             {/* Line 2 — rotating word with neon gradient */}
-            <span
-              className="block text-5xl sm:text-7xl md:text-8xl lg:text-9xl"
-              style={{
-                background: 'linear-gradient(135deg, #ff2d2dff 0%, #e5ff00ff 50%, #09f731fd 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-                transition: 'opacity 0.3s ease',
-                opacity: wordVisible ? 1 : 0,
-              }}
-            >
-              {rotatingWords[wordIndex]}
+            <span className="block animate-fade-in-left" style={{ animationDelay: '0.6s' }}>
+              <span
+                className="block text-5xl sm:text-7xl md:text-8xl lg:text-9xl"
+                style={{
+                  background: 'linear-gradient(135deg, #ff2d2dff 0%, #e5ff00ff 50%, #09f731fd 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text',
+                  transition: 'opacity 0.3s ease',
+                  opacity: wordVisible ? 1 : 0,
+                }}
+              >
+                {rotatingWords[wordIndex]}
+              </span>
             </span>
 
             {/* Line 3 */}
-            <span className="block text-5xl sm:text-7xl md:text-8xl lg:text-9xl text-white">
+            <span
+              className="block text-5xl sm:text-7xl md:text-8xl lg:text-9xl text-white animate-fade-in-left"
+              style={{ animationDelay: '0.8s' }}
+            >
               WITH DRIP
               <span style={{ color: 'var(--neon-pink)' }}>.</span>
             </span>
@@ -157,8 +184,8 @@ export default function HeroSection() {
 
           {/* Subheadline */}
           <p
-            className={`mt-8 text-lg md:text-xl text-white/50 max-w-xl leading-relaxed transition-all duration-700 delay-200 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
-            style={{ fontFamily: 'var(--font-body)' }}
+            className="mt-8 text-lg md:text-xl text-white/50 max-w-xl leading-relaxed animate-fade-in-up"
+            style={{ fontFamily: 'var(--font-body)', animationDelay: '1.0s' }}
           >
             Streetwear, Y2K, Vintage, Bold — temukan gaya yang
             <em className="not-italic" style={{ color: 'var(--neon-pink)' }}> ngobrol langsung </em>
@@ -167,7 +194,8 @@ export default function HeroSection() {
 
           {/* === CTA BUTTONS === */}
           <div
-            className={`flex flex-wrap gap-4 mt-10 transition-all duration-700 delay-300 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+            className="flex flex-wrap gap-4 mt-10 animate-fade-in-up"
+            style={{ animationDelay: '1.2s' }}
           >
             {/* Primary CTA */}
             <Link
@@ -214,14 +242,18 @@ export default function HeroSection() {
 
           {/* === SOCIAL PROOF STATS === */}
           <div
-            className={`flex flex-wrap gap-8 mt-16 pt-8 border-t border-white/10 transition-all duration-700 delay-500 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+            className="flex flex-wrap gap-8 mt-16 pt-8 border-t border-white/10"
           >
             {[
-              { value: '50K+', label: 'Happy Customers' },
-              { value: '200+', label: 'Unique Styles' },
-              { value: '4.9★', label: 'Avg Rating' },
+              { value: '50K+', label: 'Happy Customers', delay: '1.4s' },
+              { value: '200+', label: 'Unique Styles', delay: '1.5s' },
+              { value: '4.9★', label: 'Avg Rating', delay: '1.6s' },
             ].map((stat) => (
-              <div key={stat.label}>
+              <div
+                key={stat.label}
+                className="animate-fade-in-up"
+                style={{ animationDelay: stat.delay }}
+              >
                 <div
                   className="text-2xl md:text-3xl font-display font-800 text-white"
                   style={{ fontFamily: 'var(--font-display)' }}
